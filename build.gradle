@@ -1,0 +1,44 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.9"
+    }
+}
+plugins {
+    id "groovy"
+    id "net.researchgate.release" version "2.6.0"
+}
+apply plugin: "com.gradle.plugin-publish"
+
+repositories {
+    gradlePluginPortal()
+    jcenter()
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+    compile 'net.ltgt.gradle:gradle-apt-plugin:0.13'
+    compile 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
+    compile 'com.techshroom:Aversion:3.0.1'
+}
+
+pluginBundle {
+    website = 'https://github.com/Team5818/FRCGrantle'
+    vcsUrl = 'https://github.com/Team5818/FRCGrantle'
+    description = 'FRC Ant script bootstrapper.'
+
+    plugins {
+        frcGrantle {
+            id = 'org.rivierarobotics.frcgrantle'
+            displayName = 'FRCGrantle'
+            tags = ['FRC', 'ant']
+        }
+    }
+}
+
+afterReleaseBuild.dependsOn 'publishPlugins'
