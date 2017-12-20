@@ -71,19 +71,26 @@ class StandardScript implements Plugin<Project> {
 
         FirstAntConfig configTask = project.tasks.create("configureFrcAnt", FirstAntConfig)
 
-        project.tasks.create("copyFrcNativeFiles", FirstCopy) { FirstCopy task ->
+        def copyNativeTask = project.tasks.create("copyFrcNativeFiles", FirstCopy) { FirstCopy task ->
             task.unpackJar(true)
             task.configuration(frcNativeConf)
             task.outputDir(configTask.userLibsDir)
             task.excludedDependencies = excludedDeps
         }
 
-        project.tasks.create("copyFrcCompileFiles", FirstCopy) { FirstCopy task ->
+       def copyCompileTask = project.tasks.create("copyFrcCompileFiles", FirstCopy) { FirstCopy task ->
             task.unpackJar(false)
             task.configuration(frcCompileConf)
             task.outputDir(configTask.userLibsDir)
             task.excludedDependencies = excludedDeps
         }
+
+        def copyFrcTask = project.tasks.create("copyFrcFiles") { Task task -> task.dependsOn(copyCompileTask, copyNativeTask) }
+
+        // setup task dependencies
+        copyCompileTask.dependsOn(configTask)
+        copyNativeTask.dependsOn(configTask)
+        project.task('eclipse').dependsOn(copyFrcTask)
 
         project.afterEvaluate {
             project.dependencies { DependencyHandler deps ->
