@@ -101,7 +101,7 @@ class FirstAntConfig extends DefaultTask {
     }
 
     private static void ensureDirectoryExists(File dir) {
-        if (!dir.mkdirs()) {
+        if (!dir.mkdirs() && !dir.isDirectory()) {
             throw new IllegalStateException("Unable to create directory ${dir.absolutePath}")
         }
     }
