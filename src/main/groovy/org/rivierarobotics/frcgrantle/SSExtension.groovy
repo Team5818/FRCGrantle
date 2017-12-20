@@ -4,7 +4,7 @@ package org.rivierarobotics.frcgrantle
  */
 class SSExtension {
 
-    String javaVersion
+    String javaVersion = '1.8'
     FirstVersionSet versionSet = FirstVersionSet.DEFAULT
 
     def javaVersion(String value) {
