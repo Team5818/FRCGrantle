@@ -6,6 +6,7 @@ import org.gradle.api.artifacts.Dependency
 import org.gradle.api.file.CopySpec
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
@@ -17,6 +18,7 @@ class FirstCopy extends DefaultTask {
     private Configuration configuration
     private File outputDir
     private boolean unpackJar
+    @Internal
     Set<Dependency> excludedDependencies
 
     {
@@ -69,11 +71,6 @@ class FirstCopy extends DefaultTask {
 
     void outputDir(Object outputDir) {
         setOutputDir(outputDir)
-    }
-
-    @Input
-    Set<Dependency> getExcludedDependencies() {
-        return excludedDependencies
     }
 
     @TaskAction
