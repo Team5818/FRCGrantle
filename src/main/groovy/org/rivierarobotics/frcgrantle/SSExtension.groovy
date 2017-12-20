@@ -1,5 +1,4 @@
 package org.rivierarobotics.frcgrantle
-
 /**
  * The great ship S.S. Extension. It sails the seas of Gradloria, in search of proper configuration values.
  */

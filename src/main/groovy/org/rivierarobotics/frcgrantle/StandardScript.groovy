@@ -4,13 +4,21 @@ import nl.javadude.gradle.plugins.license.License
 import org.gradle.api.NamedDomainObjectCollection
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.ConfigurationContainer
+import org.gradle.api.artifacts.Dependency
+import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository
 import org.gradle.api.plugins.ExtraPropertiesExtension
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.compile.JavaCompile
+import org.rivierarobotics.frcgrantle.tasks.FirstAntConfig
+import org.rivierarobotics.frcgrantle.tasks.FirstCopy
 import util.PluginExtension
+
+import static org.rivierarobotics.frcgrantle.Const.*
 
 class StandardScript implements Plugin<Project> {
 
@@ -51,36 +59,56 @@ class StandardScript implements Plugin<Project> {
             }
         }
 
+        Configuration frcCompileConf = project.configurations.getByName(FRC_COMPILE)
+        Configuration frcNativeConf = null
+
         // setup lib catchers
         project.configurations { ConfigurationContainer conf ->
-            conf.create('frcCompile')
-            conf.create('frcNative')
+            frcNativeConf = conf.create(FRC_NATIVE)
+        }
+
+        Set<Dependency> excludedDeps = new HashSet<>()
+
+        FirstAntConfig configTask = project.tasks.create("configureFrcAnt", FirstAntConfig)
+
+        project.tasks.create("copyFrcNativeFiles", FirstCopy) { FirstCopy task ->
+            task.unpackJar(true)
+            task.configuration(frcNativeConf)
+            task.outputDir(configTask.userLibsDir)
+            task.excludedDependencies = excludedDeps
+        }
+
+        project.tasks.create("copyFrcCompileFiles", FirstCopy) { FirstCopy task ->
+            task.unpackJar(false)
+            task.configuration(frcCompileConf)
+            task.outputDir(configTask.userLibsDir)
+            task.excludedDependencies = excludedDeps
         }
 
         project.afterEvaluate {
-            project.dependencies {
+            project.dependencies { DependencyHandler deps ->
                 def vs = ext.versionSet
 
                 // Libraries from the FRC maven repo. //
-                frcCompile vs.cscore.toMapDependency(classifier: 'arm')
-                frcNative vs.cscoreNative.toMapDependency(classifier: 'athena-uberzip', ext: 'zip')
+                configTask.cscoreJar = deps.add(FRC_COMPILE, vs.cscore.toMapDependency(classifier: 'arm'))
+                deps.add(FRC_NATIVE, vs.cscoreNative.toMapDependency(classifier: 'athena-uberzip', ext: 'zip'))
 
-                frcCompile vs.networkTables.toMapDependency(classifier: 'arm')
-                frcCompile vs.networkTables.toMapDependency(classifier: 'desktop')
+                configTask.networkTablesJar = deps.add(FRC_COMPILE, vs.networkTables.toMapDependency(classifier: 'arm'))
+                deps.add(FRC_COMPILE, vs.networkTables.toMapDependency(classifier: 'desktop'))
 
-                frcCompile vs.opencv.toMapDependency()
-                frcNative vs.opencvNative.toMapDependency(classifier: 'linuxathena')
+                configTask.opencvJar = deps.add(FRC_COMPILE, vs.opencv.toMapDependency())
+                deps.add(FRC_NATIVE, vs.opencvNative.toMapDependency(classifier: 'linuxathena'))
 
-                frcCompile vs.wpilib.toMapDependency()
-                frcNative vs.wpilibNative.toMapDependency()
-                frcNative vs.wpilibRuntime.toMapDependency(ext: 'zip')
+                configTask.wpilibJar = deps.add(FRC_COMPILE, vs.wpilib.toMapDependency())
+                deps.add(FRC_NATIVE, vs.wpilibNative.toMapDependency())
+                deps.add(FRC_NATIVE, vs.wpilibRuntime.toMapDependency(ext: 'zip'))
 
                 // Libraries from the 5818 maven repo. //
-                frcCompile vs.ctrLib.toMapDependency()
-                frcNative vs.ctrLibNative.toMapDependency(ext: 'so')
+                deps.add(FRC_COMPILE, vs.ctrLib.toMapDependency())
+                deps.add(FRC_NATIVE, vs.ctrLibNative.toMapDependency(ext: 'so'))
 
                 // Other //
-                frcCompile vs.navx.toMapDependency()
+                deps.add(FRC_COMPILE, vs.navx.toMapDependency())
             }
         }
 
