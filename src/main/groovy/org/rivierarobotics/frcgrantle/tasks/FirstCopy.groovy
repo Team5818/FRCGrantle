@@ -15,6 +15,7 @@ import org.gradle.api.tasks.TaskAction
  */
 class FirstCopy extends DefaultTask {
 
+    private Set<String> expectedExtensions = new HashSet<>()
     private Configuration configuration
     private File outputDir
     private boolean unpackJar
@@ -23,6 +24,19 @@ class FirstCopy extends DefaultTask {
 
     {
         group = 'FRC'
+    }
+
+    @Input
+    Set<String> getExpectedExtensions() {
+        return expectedExtensions
+    }
+
+    void setExpectedExtensions(Set<String> expectedExtensions) {
+        this.expectedExtensions = expectedExtensions
+    }
+
+    void expectedExtensions(String... extensions) {
+        expectedExtensions.addAll(extensions)
     }
 
     @InputFiles
@@ -75,7 +89,7 @@ class FirstCopy extends DefaultTask {
 
     @TaskAction
     void copy() {
-        def didWork = inputs.files.any { file ->
+        inputs.files.any { file ->
             // assumes well-formed extensions... lol
             if (!file.name.contains(".")) {
                 throw new IllegalStateException("Files should have an extension")
@@ -93,13 +107,17 @@ class FirstCopy extends DefaultTask {
                 case "zip":
                     files = project.zipTree(file)
             }
-            def workResult = project.copy { CopySpec copy ->
-                copy.from(files)
-                copy.into(getOutputDir())
+            files.filter { f ->
+                def extension = f.name.split("\\.").last()
+                return expectedExtensions.contains(extension)
+            }.each { f ->
+                f.withInputStream { input ->
+                    new File(getOutputDir(), f.name).withOutputStream { output ->
+                        output << input
+                    }
+                }
             }
-            return workResult.didWork
         }
-        setDidWork(didWork)
     }
 
 }

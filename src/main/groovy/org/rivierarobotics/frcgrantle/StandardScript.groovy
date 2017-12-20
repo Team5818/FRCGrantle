@@ -76,13 +76,15 @@ class StandardScript implements Plugin<Project> {
             task.configuration(frcNativeConf)
             task.outputDir(configTask.userLibsDir)
             task.excludedDependencies = excludedDeps
+            task.expectedExtensions("so")
         }
 
-       def copyCompileTask = project.tasks.create("copyFrcCompileFiles", FirstCopy) { FirstCopy task ->
+        def copyCompileTask = project.tasks.create("copyFrcCompileFiles", FirstCopy) { FirstCopy task ->
             task.unpackJar(false)
             task.configuration(frcCompileConf)
             task.outputDir(configTask.userLibsDir)
             task.excludedDependencies = excludedDeps
+            task.expectedExtensions("jar")
         }
 
         def copyFrcTask = project.tasks.create("copyFrcFiles") { Task task -> task.dependsOn(copyCompileTask, copyNativeTask) }
