@@ -109,7 +109,7 @@ class StandardScript implements Plugin<Project> {
 
                 // Libraries from the 5818 maven repo. //
                 deps.add(FRC_COMPILE, vs.ctrLib.toMapDependency())
-                deps.add(FRC_NATIVE, vs.ctrLibNative.toMapDependency(ext: 'so'))
+                deps.add(FRC_NATIVE, vs.ctrLibNative.toMapDependency(ext: 'zip'))
 
                 // Other //
                 deps.add(FRC_COMPILE, vs.navx.toMapDependency())

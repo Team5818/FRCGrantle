@@ -15,8 +15,8 @@ class SimpleDep {
     static Creator CSCORE_NATIVE = CSCORE
     static Creator NETWORK_TABLES = new Creator("edu.wpi.first.wpilib.networktables.java", "NetworkTables")
     static Creator CTR_LIB = new Creator("com.ctre", "ctrlib")
-    static Creator CTR_LIB_NATIVE = new Creator("com.ctre", "libCTRLibDriver")
-    static Creator NAVX = new Creator("com.kuailabs.navx.frc", "navx_frc")
+    static Creator CTR_LIB_NATIVE = new Creator("com.ctre", "ctrlib")
+    static Creator NAVX = new Creator("com.kauailabs.navx.frc", "navx_frc")
 
     static SimpleDep create(String group, String name, String version) {
         // toolazy.png
