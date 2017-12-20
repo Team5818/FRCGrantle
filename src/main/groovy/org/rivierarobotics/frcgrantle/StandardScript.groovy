@@ -103,7 +103,6 @@ class StandardScript implements Plugin<Project> {
 
                 configTask.networkTablesJar = deps.add(FRC_COMPILE, vs.networkTables.toMapDependency(classifier: 'arm'))
                 excludedDeps.add(configTask.networkTablesJar)
-                deps.add(FRC_COMPILE, vs.networkTables.toMapDependency(classifier: 'desktop'))
 
                 configTask.opencvJar = deps.add(FRC_COMPILE, vs.opencv.toMapDependency())
                 excludedDeps.add(configTask.opencvJar)
