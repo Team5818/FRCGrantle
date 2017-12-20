@@ -90,7 +90,7 @@ class StandardScript implements Plugin<Project> {
         // setup task dependencies
         copyCompileTask.dependsOn(configTask)
         copyNativeTask.dependsOn(configTask)
-        project.task('eclipse').dependsOn(copyFrcTask)
+        project.tasks.getByName('eclipse').dependsOn(copyFrcTask)
 
         project.afterEvaluate {
             project.dependencies { DependencyHandler deps ->
