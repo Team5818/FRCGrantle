@@ -53,7 +53,7 @@ class FirstAntConfig extends DefaultTask {
         this.cscoreJar = cscoreJar
     }
 
-    void cscoreJar(File cscoreJar) {
+    void cscoreJar(Dependency cscoreJar) {
         setCscoreJar(cscoreJar)
     }
 
@@ -66,7 +66,7 @@ class FirstAntConfig extends DefaultTask {
         this.networkTablesJar = networkTablesJar
     }
 
-    void networkTablesJar(File networkTablesJar) {
+    void networkTablesJar(Dependency networkTablesJar) {
         setNetworkTablesJar(networkTablesJar)
     }
 
@@ -79,7 +79,7 @@ class FirstAntConfig extends DefaultTask {
         this.opencvJar = opencvJar
     }
 
-    void opencvJar(File opencvJar) {
+    void opencvJar(Dependency opencvJar) {
         setOpencvJar(opencvJar)
     }
 
@@ -92,7 +92,7 @@ class FirstAntConfig extends DefaultTask {
         this.wpilibJar = wpilibJar
     }
 
-    void wpilibJar(File wpilibJar) {
+    void wpilibJar(Dependency wpilibJar) {
         setWpilibJar(wpilibJar)
     }
 
