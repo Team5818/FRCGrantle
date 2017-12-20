@@ -123,8 +123,7 @@ class StandardScript implements Plugin<Project> {
         }
 
         // Move source into src
-        def sourceSets = (NamedDomainObjectCollection<SourceSet>) project.extensions.getByName("sourceSets")
-        sourceSets.getByName('main') {
+        project.sourceSets.getByName('main') {
             it.java.srcDirs = it.resources.srcDirs = ['src']
         }
 
