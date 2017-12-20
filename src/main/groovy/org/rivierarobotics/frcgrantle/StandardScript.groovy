@@ -91,15 +91,19 @@ class StandardScript implements Plugin<Project> {
 
                 // Libraries from the FRC maven repo. //
                 configTask.cscoreJar = deps.add(FRC_COMPILE, vs.cscore.toMapDependency(classifier: 'arm'))
+                excludedDeps.add(configTask.cscoreJar)
                 deps.add(FRC_NATIVE, vs.cscoreNative.toMapDependency(classifier: 'athena-uberzip', ext: 'zip'))
 
                 configTask.networkTablesJar = deps.add(FRC_COMPILE, vs.networkTables.toMapDependency(classifier: 'arm'))
+                excludedDeps.add(configTask.networkTablesJar)
                 deps.add(FRC_COMPILE, vs.networkTables.toMapDependency(classifier: 'desktop'))
 
                 configTask.opencvJar = deps.add(FRC_COMPILE, vs.opencv.toMapDependency())
+                excludedDeps.add(configTask.opencvJar)
                 deps.add(FRC_NATIVE, vs.opencvNative.toMapDependency(classifier: 'linuxathena'))
 
                 configTask.wpilibJar = deps.add(FRC_COMPILE, vs.wpilib.toMapDependency())
+                excludedDeps.add(configTask.wpilibJar)
                 deps.add(FRC_NATIVE, vs.wpilibNative.toMapDependency())
                 deps.add(FRC_NATIVE, vs.wpilibRuntime.toMapDependency(ext: 'zip'))
 
