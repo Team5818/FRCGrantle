@@ -13,7 +13,7 @@ class FirstVersionSet {
             @ClosureParams(value = SimpleType.class, options = "Builder") @DelegatesTo(Builder) Closure<?> configurationClosure) {
         def builder = new Builder()
         configurationClosure.delegate = builder
-        configurationClosure.call()
+        configurationClosure.call(builder)
         return builder.build()
     }
 
