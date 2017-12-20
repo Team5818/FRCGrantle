@@ -18,6 +18,10 @@ class FirstAntConfig extends DefaultTask {
     private Dependency opencvJar
     private Dependency wpilibJar
 
+    {
+        group = 'FRC'
+    }
+
     @Input
     File getUserLibsDir() {
         return userLibsDir
