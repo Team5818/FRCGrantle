@@ -1,7 +1,6 @@
 package org.rivierarobotics.frcgrantle
 
 import nl.javadude.gradle.plugins.license.License
-import org.gradle.api.NamedDomainObjectCollection
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -12,7 +11,6 @@ import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository
 import org.gradle.api.plugins.ExtraPropertiesExtension
-import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.compile.JavaCompile
 import org.rivierarobotics.frcgrantle.tasks.FirstAntConfig
 import org.rivierarobotics.frcgrantle.tasks.FirstCopy
@@ -24,7 +22,7 @@ class StandardScript implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        def ext = project.extensions.create('grantle', SSExtension)
+        def ext = project.extensions.create(EXTENSION, SSExtension)
 
         project.apply plugin: "net.ltgt.apt"
         project.apply plugin: "com.github.hierynomus.license"
@@ -35,6 +33,7 @@ class StandardScript implements Plugin<Project> {
 
         project.afterEvaluate {
             PluginExtension util = (PluginExtension) project.extensions.getByName('util')
+            ext.validate()
             util.javaVersion = ext.javaVersion
             project.idea.project.languageLevel = ext.javaVersion
         }

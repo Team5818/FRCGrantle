@@ -18,6 +18,7 @@ class FRCGrantleTest extends Specification {
             plugins {
                 id 'org.rivierarobotics.frcgrantle'
             }
+            grantle.packageBase = "org.rivierarobotics.robot"
         """
         def props = testProjectDir.newFile('gradle.properties')
         props << """

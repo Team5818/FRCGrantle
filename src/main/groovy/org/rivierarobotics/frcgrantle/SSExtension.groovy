@@ -6,6 +6,7 @@ class SSExtension {
 
     String javaVersion = '1.8'
     FirstVersionSet versionSet = FirstVersionSet.DEFAULT
+    String packageBase
 
     def javaVersion(String value) {
         javaVersion = value
@@ -13,6 +14,22 @@ class SSExtension {
 
     def versionSet(FirstVersionSet value) {
         versionSet = value
+    }
+
+    def packageBase(String value) {
+        packageBase = value
+    }
+
+    def validate() {
+        check(javaVersion != null, "javaVersion cannot be null")
+        check(versionSet != null, "versionSet cannot be null")
+        check(packageBase != null, "packageBase cannot be null")
+    }
+
+    private static void check(boolean condition, String message) {
+        if (!condition) {
+            throw new IllegalStateException(message)
+        }
     }
 
 }
