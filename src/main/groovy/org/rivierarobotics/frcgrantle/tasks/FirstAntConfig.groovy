@@ -13,8 +13,9 @@ import static org.rivierarobotics.frcgrantle.Const.FRC_COMPILE
 
 class FirstAntConfig extends DefaultTask {
 
-    private File userLibsDir = project.file('build/frclibs/user')
-    private File wpilibNativeDir = project.file('build/.frclibs/wpilib')
+    private File base = project.file('build/frclibs')
+    private File userLibsDir = new File(base, 'user')
+    private File wpilibNativeDir = new File(base, 'wpilib')
     private Dependency cscoreJar
     private Dependency networkTablesJar
     private Dependency opencvJar
