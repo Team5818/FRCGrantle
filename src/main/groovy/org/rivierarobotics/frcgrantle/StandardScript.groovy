@@ -31,6 +31,9 @@ class StandardScript implements Plugin<Project> {
         project.apply plugin: 'idea'
         project.apply plugin: 'aversion-util'
 
+        // to avoid conflicts with ant, which also uses build
+        project.buildDir = project.file('gradleBuildDir')
+
         project.afterEvaluate {
             PluginExtension util = (PluginExtension) project.extensions.getByName('util')
             ext.validate()
