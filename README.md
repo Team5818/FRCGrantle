@@ -1,5 +1,4 @@
-_FRC_Gr**ant**le
-================
+_FRC_ Gr**ant**le
 
 Gradle bootstrap for the FRC ant scripts. Handles setting up the project in a
 shared way that allows the native ant scripts to be used, while keeping IDE
