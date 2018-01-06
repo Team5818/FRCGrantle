@@ -57,7 +57,7 @@ class FirstVersionSet {
 
     static final def V_2018_1_1 = create { b ->
         b.wpilib = SimpleDep.WPILIB_2018.withVersion("2018.1.1")
-        b.wpilibNative = SimpleDep.WPILIB_2018_NATIVE.withVersion("2018.1.1")
+        b.wpilibNative = SimpleDep.WPILIB_2018_NATIVE.withVersion("2018.1.1").withInputOverrides(classifier: 'linuxathena')
         b.wpilibRuntime = SimpleDep.WPILIB_2018_RUNTIME.withVersion("2018.1.1").withInputOverrides(classifier: 'linuxathena')
         b.opencv = SimpleDep.OPENCV.withVersion("3.2.0")
         b.opencvNative = SimpleDep.OPENCV_NATIVE.withVersion("3.2.0")

@@ -89,12 +89,12 @@ class FirstCopy extends DefaultTask {
 
     @TaskAction
     void copy() {
-        inputs.files.any { file ->
+        inputs.files.each { file ->
             // assumes well-formed extensions... lol
             if (!file.name.contains(".")) {
                 throw new IllegalStateException("Files should have an extension")
             }
-            logger.info("Copying", file)
+            logger.debug("Copying ${file}")
             def files = project.files(file)
             def ext = file.name.split("\\.").last()
             switch (ext) {
@@ -112,7 +112,8 @@ class FirstCopy extends DefaultTask {
                 return expectedExtensions.contains(extension)
             }.each { f ->
                 f.withInputStream { input ->
-                    new File(getOutputDir(), f.name).withOutputStream { output ->
+                    def outputFile = new File(getOutputDir(), f.name)
+                    outputFile.withOutputStream { output ->
                         output << input
                     }
                 }
