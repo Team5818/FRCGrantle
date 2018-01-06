@@ -9,8 +9,8 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class FRCGrantleTest extends Specification {
     private static final def FVS_VERSIONS = [
-            "V_2017_3_1",
-            "V_2018_1_1"
+            "versionSet_2017_3_1",
+            "versionSet_2018_1_1"
     ]
     @Rule
     final TemporaryFolder testProjectDir = new TemporaryFolder()
@@ -23,7 +23,7 @@ class FRCGrantleTest extends Specification {
                 id 'org.rivierarobotics.frcgrantle'
             }
             grantle.packageBase = "org.rivierarobotics.robot"
-            grantle.versionSet = grantle.${versionString}
+            grantle.${versionString}()
         """
         def props = testProjectDir.newFile('gradle.properties')
         props << """
@@ -47,13 +47,14 @@ class FRCGrantleTest extends Specification {
             assert props.containsKey('userLibs.dir')
             assert props.containsKey('wpilib.native.lib')
             assert props.containsKey('cscore.jar')
-            assert props.containsKey('networktables.jar')
+            assert props.containsKey(networkTableProperty + '.jar')
             assert props.containsKey('opencv.jar')
             assert props.containsKey('wpilib.jar')
         }
 
         where:
         versionString << FVS_VERSIONS
+        networkTableProperty << ['networktables', 'ntcore']
     }
 
     private Properties loadPropertiesFile() {

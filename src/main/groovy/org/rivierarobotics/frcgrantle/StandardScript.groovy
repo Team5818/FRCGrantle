@@ -101,48 +101,25 @@ class StandardScript implements Plugin<Project> {
             project.dependencies { DependencyHandler deps ->
                 def vs = ext.versionSet
 
-                // Libraries from the FRC maven repo. //
-                ifNonNull(vs.cscore) {
-                    configTask.cscoreJar = deps.add(FRC_COMPILE, vs.cscore.toMapDependency())
-                    excludedDeps.add(configTask.cscoreJar)
-                    deps.add(FRC_NATIVE, vs.cscoreNative.toMapDependency())
+                vs.builtIn.forEach { propKey, simpleDep ->
+                    def dep = deps.add(FRC_COMPILE, simpleDep.toMapDependency())
+                    configTask.builtInJars.put(propKey, dep)
+                    excludedDeps.add(dep)
                 }
 
-                ifNonNull(vs.networkTables) {
-                    configTask.networkTablesJar = deps.add(FRC_COMPILE, vs.networkTables.toMapDependency(classifier: 'arm'))
-                    excludedDeps.add(configTask.networkTablesJar)
+                vs.userJava.forEach { simpleDep ->
+                    deps.add(FRC_COMPILE, simpleDep.toMapDependency())
                 }
 
-                ifNonNull(vs.opencv) {
-                    configTask.opencvJar = deps.add(FRC_COMPILE, vs.opencv.toMapDependency())
-                    excludedDeps.add(configTask.opencvJar)
-                    deps.add(FRC_NATIVE, vs.opencvNative.toMapDependency(classifier: 'linuxathena'))
-                }
-
-                ifNonNull(vs.wpilib) {
-                    configTask.wpilibJar = deps.add(FRC_COMPILE, vs.wpilib.toMapDependency())
-                    excludedDeps.add(configTask.wpilibJar)
-                    deps.add(FRC_NATIVE, vs.wpilibNative.toMapDependency())
-                    deps.add(FRC_NATIVE, vs.wpilibRuntime.toMapDependency())
-                }
-
-                // Libraries from the 5818 maven repo. //
-                ifNonNull(vs.ctrLib) {
-                    deps.add(FRC_COMPILE, vs.ctrLib.toMapDependency())
-                    deps.add(FRC_NATIVE, vs.ctrLibNative.toMapDependency(ext: 'zip'))
-                }
-
-                // Other //
-                ifNonNull(vs.navx) {
-                    deps.add(FRC_COMPILE, vs.navx.toMapDependency())
+                vs.userNative.forEach { simpleDep ->
+                    deps.add(FRC_NATIVE, simpleDep.toMapDependency())
                 }
             }
         }
 
         // Add eclipse FRC nature
-        project.eclipse.project.file.beforeMerged {
-            proj ->
-                proj.natures.add('edu.wpi.first.wpilib.plugins.core.nature.FRCProjectNature')
+        project.eclipse.project.file.beforeMerged { proj ->
+            proj.natures.add('edu.wpi.first.wpilib.plugins.core.nature.FRCProjectNature')
         }
 
         // Move source into src

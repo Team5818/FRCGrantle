@@ -4,6 +4,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
@@ -13,13 +14,10 @@ import static org.rivierarobotics.frcgrantle.Const.FRC_COMPILE
 
 class FirstAntConfig extends DefaultTask {
 
+    private Map<String, Dependency> builtInJars = new HashMap<>()
     private File base = project.file("${project.buildDir}/frclibs")
     private File userLibsDir = new File(base, 'user')
     private File wpilibNativeDir = new File(base, 'wpilib')
-    private Dependency cscoreJar
-    private Dependency networkTablesJar
-    private Dependency opencvJar
-    private Dependency wpilibJar
 
     private File buildPropertiesFile = project.file('build.properties');
 
@@ -54,58 +52,20 @@ class FirstAntConfig extends DefaultTask {
     }
 
     @Internal
-    Dependency getCscoreJar() {
-        return cscoreJar
+    Map<String, Dependency> getBuiltInJars() {
+        return builtInJars
     }
 
-    void setCscoreJar(Dependency cscoreJar) {
-        this.cscoreJar = cscoreJar
+    void setBuiltInJars(Map<String, Dependency> builtInJars) {
+        this.builtInJars = builtInJars
     }
 
-    void cscoreJar(Dependency cscoreJar) {
-        setCscoreJar(cscoreJar)
-    }
-
-    @Internal
-    Dependency getNetworkTablesJar() {
-        return networkTablesJar
-    }
-
-    void setNetworkTablesJar(Dependency networkTablesJar) {
-        this.networkTablesJar = networkTablesJar
-    }
-
-    void networkTablesJar(Dependency networkTablesJar) {
-        setNetworkTablesJar(networkTablesJar)
+    @InputFiles
+    String getBuiltInJarFiles() {
+        return configuration.files(builtInJars.values().toArray(new Dependency[0]))
     }
 
     @Internal
-    Dependency getOpencvJar() {
-        return opencvJar
-    }
-
-    void setOpencvJar(Dependency opencvJar) {
-        this.opencvJar = opencvJar
-    }
-
-    void opencvJar(Dependency opencvJar) {
-        setOpencvJar(opencvJar)
-    }
-
-    @Internal
-    Dependency getWpilibJar() {
-        return wpilibJar
-    }
-
-    void setWpilibJar(Dependency wpilibJar) {
-        this.wpilibJar = wpilibJar
-    }
-
-    void wpilibJar(Dependency wpilibJar) {
-        setWpilibJar(wpilibJar)
-    }
-
-    @Input
     Configuration getConfiguration() {
         return project.configurations.getByName(FRC_COMPILE)
     }
@@ -136,10 +96,9 @@ class FirstAntConfig extends DefaultTask {
         // check resolve
         compile.resolvedConfiguration.rethrowFailure()
 
-        antProperties['cscore.jar'] = compile.files(cscoreJar).first().absolutePath
-        antProperties['networktables.jar'] = compile.files(networkTablesJar).first().absolutePath
-        antProperties['opencv.jar'] = compile.files(opencvJar).first().absolutePath
-        antProperties['wpilib.jar'] = compile.files(wpilibJar).first().absolutePath
+        builtInJars.forEach { propKey, dependency ->
+            antProperties[propKey + '.jar'] = compile.files(dependency).first().absolutePath
+        }
 
         antProperties['package'] = ext.packageBase
         antProperties['robot.class'] = '${package}.Robot'

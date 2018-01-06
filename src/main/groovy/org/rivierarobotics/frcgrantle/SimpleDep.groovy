@@ -9,16 +9,15 @@ class SimpleDep {
     static Creator WPILIB_2017 = new Creator("edu.wpi.first.wpilibj", "athena")
     static Creator WPILIB_2017_NATIVE = new Creator("edu.wpi.first.wpilibj", "athena-jni")
     static Creator WPILIB_2017_RUNTIME = new Creator("edu.wpi.first.wpilib", "athena-runtime")
-    static Creator WPILIB_2018 = new Creator("edu.wpi.first.wpilibj", "wpilibj-java")
-    static Creator WPILIB_2018_NATIVE = new Creator("edu.wpi.first.wpilibj", "wpilibj-jni")
+    static Creator WPILIB_2018 = new Creator("edu.wpi.first.wpilibj", "wpilibj")
     static Creator WPILIB_2018_RUNTIME = new Creator("edu.wpi.first.wpilibj", "wpilibj-jniShared")
-    static Creator OPENCV = new Creator("org.opencv", "opencv-java")
-    static Creator OPENCV_NATIVE = new Creator("org.opencv", "opencv-jni")
+    static Creator WPI_UTIL = new Creator("edu.wpi.first.wpiutil", "wpiutil-java")
+    static Creator OPENCV = new Creator("org.opencv", "opencv")
     static Creator CSCORE = new Creator("edu.wpi.cscore.java", "cscore")
     static Creator CSCORE_NATIVE = CSCORE
-    static Creator CSCORE_2018 = new Creator("edu.wpi.first.cscore", "cscore-java")
-    static Creator CSCORE_2018_NATIVE = new Creator("edu.wpi.first.cscore", "cscore-jni")
+    static Creator CSCORE_2018 = new Creator("edu.wpi.first.cscore", "cscore")
     static Creator NETWORK_TABLES = new Creator("edu.wpi.first.wpilib.networktables.java", "NetworkTables")
+    static Creator NTCORE = new Creator("edu.wpi.first.ntcore", "ntcore")
     static Creator CTR_LIB = new Creator("com.ctre", "ctrlib")
     static Creator CTR_LIB_NATIVE = new Creator("com.ctre", "ctrlib")
     static Creator NAVX = new Creator("com.kauailabs.navx.frc", "navx_frc")
@@ -60,6 +59,12 @@ class SimpleDep {
 
     SimpleDep withGroupName(String group, String name) {
         return create(group, name, version)
+    }
+
+    SimpleDep addInputOverrides(Map<String, String> inputOverrides) {
+        def map = new HashMap(this.inputOverrides)
+        map.putAll(inputOverrides)
+        return withInputOverrides(map)
     }
 
     SimpleDep withInputOverrides(Map<String, String> inputOverrides) {
