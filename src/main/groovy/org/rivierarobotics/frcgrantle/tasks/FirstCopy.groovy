@@ -43,7 +43,9 @@ class FirstCopy extends DefaultTask {
     Closure<Set<File>> getInputFiles() {
         return {
             Set<Dependency> deps = new HashSet<>(configuration.dependencies)
-            deps.removeAll(excludedDependencies)
+            deps.removeIf { dep ->
+                return excludedDependencies.any { excl -> dep.group == excl.group && dep.name == excl.name && dep.version == excl.version }
+            }
             return configuration.files(deps.toArray(new Dependency[0]))
         }
     }
