@@ -50,7 +50,7 @@ class FirstCopy extends DefaultTask {
         }
     }
 
-    @Input
+    @Internal
     Configuration getConfiguration() {
         return configuration
     }
