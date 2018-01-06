@@ -20,6 +20,7 @@ class SSExtension {
         versionSet.addUserNativeLibrary(SimpleDep.CTR_LIB_NATIVE.withVersion('4.4.1.14').withInputOverrides(ext: 'zip'))
 
         versionSet.addUserJavaLibrary(SimpleDep.NAVX.withVersion('NONE'))
+        appliedVersionConfiguration = true
     }
 
     def versionSet_2018_1_1() {
@@ -38,11 +39,13 @@ class SSExtension {
         versionSet.addUserNativeLibrary(SimpleDep.CTR_LIB_NATIVE.withVersion('5.1.3.1').withInputOverrides(ext: 'zip'))
 
         versionSet.addUserJavaLibrary(SimpleDep.NAVX.withVersion('3.0.342'))
+        appliedVersionConfiguration = true
     }
 
 
     String javaVersion = '1.8'
     FirstVersionSet versionSet = FirstVersionSet.create()
+    boolean appliedVersionConfiguration = false
     String packageBase
 
     def javaVersion(String value) {
@@ -61,6 +64,7 @@ class SSExtension {
         check(javaVersion != null, "javaVersion cannot be null")
         check(versionSet != null, "versionSet cannot be null")
         check(packageBase != null, "packageBase cannot be null")
+        check(appliedVersionConfiguration, "version configuration not applied, please call a versionSet method or set `appliedVersionConfiguration` to true")
     }
 
     private static void check(boolean condition, String message) {
