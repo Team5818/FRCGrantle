@@ -8,17 +8,22 @@ import spock.lang.Specification
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class FRCGrantleTest extends Specification {
+    private static final def FVS_VERSIONS = [
+            "V_2017_3_1",
+            "V_2018_1_1"
+    ]
     @Rule
     final TemporaryFolder testProjectDir = new TemporaryFolder()
     File buildFile
 
-    def setup() {
+    def newBuildFile(String versionString) {
         buildFile = testProjectDir.newFile('build.gradle')
         buildFile << """
             plugins {
                 id 'org.rivierarobotics.frcgrantle'
             }
             grantle.packageBase = "org.rivierarobotics.robot"
+            grantle.versionSet = grantle.${versionString}
         """
         def props = testProjectDir.newFile('gradle.properties')
         props << """
@@ -29,6 +34,7 @@ class FRCGrantleTest extends Specification {
 
     def "configures FRC build.properties"() {
         when:
+        newBuildFile(versionString)
         def result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
                 .withArguments('configureFrcAnt', '-S')
@@ -45,6 +51,9 @@ class FRCGrantleTest extends Specification {
             assert props.containsKey('opencv.jar')
             assert props.containsKey('wpilib.jar')
         }
+
+        where:
+        versionString << FVS_VERSIONS
     }
 
     private Properties loadPropertiesFile() {
@@ -56,6 +65,7 @@ class FRCGrantleTest extends Specification {
 
     def "installs FRC libraries"() {
         when:
+        newBuildFile(versionString)
         def result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
                 .withArguments('copyFrcFiles', '-S')
@@ -69,5 +79,8 @@ class FRCGrantleTest extends Specification {
             assert userLibs.exists()
             assert userLibs.list().length > 0
         }
+
+        where:
+        versionString << FVS_VERSIONS
     }
 }

@@ -9,10 +9,15 @@ class SimpleDep {
     static Creator WPILIB_2017 = new Creator("edu.wpi.first.wpilibj", "athena")
     static Creator WPILIB_2017_NATIVE = new Creator("edu.wpi.first.wpilibj", "athena-jni")
     static Creator WPILIB_2017_RUNTIME = new Creator("edu.wpi.first.wpilib", "athena-runtime")
+    static Creator WPILIB_2018 = new Creator("edu.wpi.first.wpilibj", "wpilibj-java")
+    static Creator WPILIB_2018_NATIVE = new Creator("edu.wpi.first.wpilibj", "wpilibj-jni")
+    static Creator WPILIB_2018_RUNTIME = new Creator("edu.wpi.first.wpilibj", "wpilibj-jniShared")
     static Creator OPENCV = new Creator("org.opencv", "opencv-java")
     static Creator OPENCV_NATIVE = new Creator("org.opencv", "opencv-jni")
     static Creator CSCORE = new Creator("edu.wpi.cscore.java", "cscore")
     static Creator CSCORE_NATIVE = CSCORE
+    static Creator CSCORE_2018 = new Creator("edu.wpi.first.cscore", "cscore-java")
+    static Creator CSCORE_2018_NATIVE = new Creator("edu.wpi.first.cscore", "cscore-jni")
     static Creator NETWORK_TABLES = new Creator("edu.wpi.first.wpilib.networktables.java", "NetworkTables")
     static Creator CTR_LIB = new Creator("com.ctre", "ctrlib")
     static Creator CTR_LIB_NATIVE = new Creator("com.ctre", "ctrlib")
@@ -40,11 +45,13 @@ class SimpleDep {
     }
 
     final String group, name, version
+    final Map<String, String> inputOverrides
 
-    private SimpleDep(String group, String name, String version) {
+    private SimpleDep(String group, String name, String version, Map<String, String> inputOverrides = [:]) {
         this.group = group
         this.name = name
         this.version = version
+        this.inputOverrides = inputOverrides
     }
 
     SimpleDep withName(String name) {
@@ -55,8 +62,13 @@ class SimpleDep {
         return create(group, name, version)
     }
 
+    SimpleDep withInputOverrides(Map<String, String> inputOverrides) {
+        return new SimpleDep(group, name, version, inputOverrides)
+    }
+
     Map<String, String> toMapDependency(Map<String, String> inputs = [:]) {
         def copy = new HashMap(inputs)
+        copy.putAll(inputOverrides)
         copy['group'] = group
         copy['name'] = name
         copy['version'] = version

@@ -17,6 +17,7 @@ import org.rivierarobotics.frcgrantle.tasks.FirstCopy
 import util.PluginExtension
 
 import static org.rivierarobotics.frcgrantle.Const.*
+import static org.rivierarobotics.frcgrantle.Util.ifNonNull
 
 class StandardScript implements Plugin<Project> {
 
@@ -101,28 +102,40 @@ class StandardScript implements Plugin<Project> {
                 def vs = ext.versionSet
 
                 // Libraries from the FRC maven repo. //
-                configTask.cscoreJar = deps.add(FRC_COMPILE, vs.cscore.toMapDependency(classifier: 'arm'))
-                excludedDeps.add(configTask.cscoreJar)
-                deps.add(FRC_NATIVE, vs.cscoreNative.toMapDependency(classifier: 'athena-uberzip', ext: 'zip'))
+                ifNonNull(vs.cscore) {
+                    configTask.cscoreJar = deps.add(FRC_COMPILE, vs.cscore.toMapDependency())
+                    excludedDeps.add(configTask.cscoreJar)
+                    deps.add(FRC_NATIVE, vs.cscoreNative.toMapDependency())
+                }
 
-                configTask.networkTablesJar = deps.add(FRC_COMPILE, vs.networkTables.toMapDependency(classifier: 'arm'))
-                excludedDeps.add(configTask.networkTablesJar)
+                ifNonNull(vs.networkTables) {
+                    configTask.networkTablesJar = deps.add(FRC_COMPILE, vs.networkTables.toMapDependency(classifier: 'arm'))
+                    excludedDeps.add(configTask.networkTablesJar)
+                }
 
-                configTask.opencvJar = deps.add(FRC_COMPILE, vs.opencv.toMapDependency())
-                excludedDeps.add(configTask.opencvJar)
-                deps.add(FRC_NATIVE, vs.opencvNative.toMapDependency(classifier: 'linuxathena'))
+                ifNonNull(vs.opencv) {
+                    configTask.opencvJar = deps.add(FRC_COMPILE, vs.opencv.toMapDependency())
+                    excludedDeps.add(configTask.opencvJar)
+                    deps.add(FRC_NATIVE, vs.opencvNative.toMapDependency(classifier: 'linuxathena'))
+                }
 
-                configTask.wpilibJar = deps.add(FRC_COMPILE, vs.wpilib.toMapDependency())
-                excludedDeps.add(configTask.wpilibJar)
-                deps.add(FRC_NATIVE, vs.wpilibNative.toMapDependency())
-                deps.add(FRC_NATIVE, vs.wpilibRuntime.toMapDependency(ext: 'zip'))
+                ifNonNull(vs.wpilib) {
+                    configTask.wpilibJar = deps.add(FRC_COMPILE, vs.wpilib.toMapDependency())
+                    excludedDeps.add(configTask.wpilibJar)
+                    deps.add(FRC_NATIVE, vs.wpilibNative.toMapDependency())
+                    deps.add(FRC_NATIVE, vs.wpilibRuntime.toMapDependency())
+                }
 
                 // Libraries from the 5818 maven repo. //
-                deps.add(FRC_COMPILE, vs.ctrLib.toMapDependency())
-                deps.add(FRC_NATIVE, vs.ctrLibNative.toMapDependency(ext: 'zip'))
+                ifNonNull(vs.ctrLib) {
+                    deps.add(FRC_COMPILE, vs.ctrLib.toMapDependency())
+                    deps.add(FRC_NATIVE, vs.ctrLibNative.toMapDependency(ext: 'zip'))
+                }
 
                 // Other //
-                deps.add(FRC_COMPILE, vs.navx.toMapDependency())
+                ifNonNull(vs.navx) {
+                    deps.add(FRC_COMPILE, vs.navx.toMapDependency())
+                }
             }
         }
 

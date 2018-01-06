@@ -4,6 +4,9 @@ package org.rivierarobotics.frcgrantle
  */
 class SSExtension {
 
+    public static final FirstVersionSet V_2017_3_1 = FirstVersionSet.V_2017_3_1
+    public static final FirstVersionSet V_2018_1_1 = FirstVersionSet.V_2018_1_1
+
     String javaVersion = '1.8'
     FirstVersionSet versionSet = FirstVersionSet.DEFAULT
     String packageBase

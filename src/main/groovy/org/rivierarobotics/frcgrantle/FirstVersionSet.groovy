@@ -33,8 +33,8 @@ class FirstVersionSet {
 
         FirstVersionSet build() {
             def options = [wpilib, wpilibNative, wpilibRuntime, opencv, opencvNative, cscore, cscoreNative, networkTables, ctrLib, ctrLibNative, navx]
-            if (options.any { it == null }) {
-                throw new NullPointerException("Something is null ${options}")
+            if (options.any({ it == null })) {
+                throw new IllegalStateException("Null dependency!")
             }
             return new FirstVersionSet(wpilib, wpilibNative, wpilibRuntime, opencv, opencvNative, cscore, cscoreNative, networkTables, ctrLib, ctrLibNative, navx)
         }
@@ -44,18 +44,32 @@ class FirstVersionSet {
     static final def V_2017_3_1 = create { b ->
         b.wpilib = SimpleDep.WPILIB_2017.withVersion("2017.3.1")
         b.wpilibNative = SimpleDep.WPILIB_2017_NATIVE.withVersion("2017.3.1")
-        b.wpilibRuntime = SimpleDep.WPILIB_2017_RUNTIME.withVersion("2017.3.1")
+        b.wpilibRuntime = SimpleDep.WPILIB_2017_RUNTIME.withVersion("2017.3.1").withInputOverrides(ext: 'zip')
         b.opencv = SimpleDep.OPENCV.withVersion("3.2.0")
         b.opencvNative = SimpleDep.OPENCV_NATIVE.withVersion("3.2.0")
-        b.cscore = SimpleDep.CSCORE.withVersion("1.0.2")
-        b.cscoreNative = SimpleDep.CSCORE_NATIVE.withVersion("1.0.2")
+        b.cscore = SimpleDep.CSCORE.withVersion("1.0.2").withInputOverrides(classifier: 'arm')
+        b.cscoreNative = SimpleDep.CSCORE_NATIVE.withVersion("1.0.2").withInputOverrides(classifier: 'athena-uberzip', ext: 'zip')
         b.networkTables = SimpleDep.NETWORK_TABLES.withVersion('3.1.7')
         b.ctrLib = SimpleDep.CTR_LIB.withVersion("4.4.1.14")
         b.ctrLibNative = SimpleDep.CTR_LIB_NATIVE.withVersion("4.4.1.14")
         b.navx = SimpleDep.NAVX.withVersion("NONE")
     }
 
-    static final def DEFAULT = V_2017_3_1
+    static final def V_2018_1_1 = create { b ->
+        b.wpilib = SimpleDep.WPILIB_2018.withVersion("2018.1.1")
+        b.wpilibNative = SimpleDep.WPILIB_2018_NATIVE.withVersion("2018.1.1")
+        b.wpilibRuntime = SimpleDep.WPILIB_2018_RUNTIME.withVersion("2018.1.1").withInputOverrides(classifier: 'linuxathena')
+        b.opencv = SimpleDep.OPENCV.withVersion("3.2.0")
+        b.opencvNative = SimpleDep.OPENCV_NATIVE.withVersion("3.2.0")
+        b.cscore = SimpleDep.CSCORE_2018.withVersion("1.1.0")
+        b.cscoreNative = SimpleDep.CSCORE_2018_NATIVE.withVersion("1.1.0").withInputOverrides(classifier: 'linuxathena')
+        b.networkTables = SimpleDep.NETWORK_TABLES.withVersion('3.1.7')
+        b.ctrLib = SimpleDep.CTR_LIB.withVersion("5.1.3.1")
+        b.ctrLibNative = SimpleDep.CTR_LIB_NATIVE.withVersion("5.1.3.1")
+        b.navx = SimpleDep.NAVX.withVersion("3.0.342")
+    }
+
+    static final def DEFAULT = V_2018_1_1
 
     final SimpleDep wpilib
     final SimpleDep wpilibNative
