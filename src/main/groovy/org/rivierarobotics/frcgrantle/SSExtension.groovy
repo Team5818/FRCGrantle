@@ -47,6 +47,7 @@ class SSExtension {
     FirstVersionSet versionSet = FirstVersionSet.create()
     boolean appliedVersionConfiguration = false
     String packageBase
+    int teamNumber = 0
 
     def javaVersion(String value) {
         javaVersion = value
@@ -65,6 +66,7 @@ class SSExtension {
         check(versionSet != null, "versionSet cannot be null")
         check(packageBase != null, "packageBase cannot be null")
         check(appliedVersionConfiguration, "version configuration not applied, please call a versionSet method or set `appliedVersionConfiguration` to true")
+        check(teamNumber > 0, "teamNumber must be set")
     }
 
     private static void check(boolean condition, String message) {

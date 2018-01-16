@@ -23,6 +23,7 @@ class FRCGrantleTest extends Specification {
                 id 'org.rivierarobotics.frcgrantle'
             }
             grantle.packageBase = "org.rivierarobotics.robot"
+            grantle.teamNumber = 5818
             grantle.${versionString}()
         """
         def props = testProjectDir.newFile('gradle.properties')
@@ -50,6 +51,7 @@ class FRCGrantleTest extends Specification {
             assert props.containsKey(networkTableProperty + '.jar')
             assert props.containsKey('opencv.jar')
             assert props.containsKey('wpilib.jar')
+            assert props.getOrDefault('team-number', '') == '5818'
         }
 
         where:
