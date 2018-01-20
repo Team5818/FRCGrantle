@@ -42,6 +42,25 @@ class SSExtension {
         appliedVersionConfiguration = true
     }
 
+    def versionSet_2018_2_1() {
+        versionSet.addNewStyleBuiltInLibrary('wpilib', SimpleDep.WPILIB_2018.withVersion('2018.2.1'))
+        versionSet.addUserNativeLibrary(SimpleDep.WPILIB_2018_RUNTIME.withVersion('2018.2.1').withInputOverrides(classifier: 'linuxathena'))
+
+        versionSet.addBuiltInLibrary('wpiutil', SimpleDep.WPI_UTIL.withVersion('3.0.0'))
+
+        versionSet.addNewStyleBuiltInLibrary('opencv', SimpleDep.OPENCV.withVersion('3.2.0'))
+
+        versionSet.addNewStyleBuiltInLibrary('cscore', SimpleDep.CSCORE_2018.withVersion('1.1.0'))
+
+        versionSet.addNewStyleBuiltInLibrary('ntcore', SimpleDep.NTCORE.withVersion('4.0.0'))
+
+        versionSet.addUserJavaLibrary(SimpleDep.CTR_LIB.withVersion('5.2.1.1'))
+        versionSet.addUserNativeLibrary(SimpleDep.CTR_LIB_NATIVE.withVersion('5.2.1.1').withInputOverrides(ext: 'zip'))
+
+        versionSet.addUserJavaLibrary(SimpleDep.NAVX.withVersion('3.0.346'))
+        appliedVersionConfiguration = true
+    }
+
 
     String javaVersion = '1.8'
     FirstVersionSet versionSet = FirstVersionSet.create()

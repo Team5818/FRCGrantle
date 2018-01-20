@@ -4,13 +4,15 @@ import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class FRCGrantleTest extends Specification {
     private static final def FVS_VERSIONS = [
             "versionSet_2017_3_1",
-            "versionSet_2018_1_1"
+            "versionSet_2018_1_1",
+            "versionSet_2018_2_1"
     ]
     @Rule
     final TemporaryFolder testProjectDir = new TemporaryFolder()
@@ -33,6 +35,7 @@ class FRCGrantleTest extends Specification {
         """
     }
 
+    @Unroll("Grantle configures build.properties for #versionString")
     def "configures FRC build.properties"() {
         when:
         newBuildFile(versionString)
@@ -56,7 +59,7 @@ class FRCGrantleTest extends Specification {
 
         where:
         versionString << FVS_VERSIONS
-        networkTableProperty << ['networktables', 'ntcore']
+        networkTableProperty << ['networktables', 'ntcore', 'ntcore']
     }
 
     private Properties loadPropertiesFile() {
@@ -66,6 +69,7 @@ class FRCGrantleTest extends Specification {
         props
     }
 
+    @Unroll("Grantle installs FRC libraries for #versionString")
     def "installs FRC libraries"() {
         when:
         newBuildFile(versionString)
