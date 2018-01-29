@@ -25,12 +25,16 @@ class FirstAntConfig extends DefaultTask {
         group = 'FRC'
     }
 
-    @Internal
     private SSExtension getPluginExt() {
         return project.extensions.getByType(SSExtension.class)
     }
 
     @Input
+    String getUserLibsDirPath() {
+        return userLibsDir.absolutePath
+    }
+
+    @Internal
     File getUserLibsDir() {
         return userLibsDir
     }
@@ -44,6 +48,11 @@ class FirstAntConfig extends DefaultTask {
     }
 
     @Input
+    String getWpilibNativeDirPath() {
+        return wpilibNativeDir.absolutePath
+    }
+
+    @Internal
     File getWpilibNativeDir() {
         return wpilibNativeDir
     }
@@ -98,11 +107,11 @@ class FirstAntConfig extends DefaultTask {
 
     @TaskAction
     void configureFirstAnt() {
-        ensureDirectoryExists(userLibsDir)
-        ensureDirectoryExists(wpilibNativeDir)
+        ensureDirectoryExists(getUserLibsDir())
+        ensureDirectoryExists(getWpilibNativeDir())
         def antProperties = new Properties()
-        antProperties['userLibs.dir'] = userLibsDir.absolutePath
-        antProperties['wpilib.native.lib'] = wpilibNativeDir.absolutePath
+        antProperties['userLibs.dir'] = getUserLibsDirPath()
+        antProperties['wpilib.native.lib'] = getWpilibNativeDirPath()
 
         // grab libraries
         def compile = configuration
@@ -114,7 +123,7 @@ class FirstAntConfig extends DefaultTask {
             antProperties[propKey + '.jar'] = compile.files(dependency).first().absolutePath
         }
 
-        antProperties['package'] = packageBase
+        antProperties['package'] = getPackageBase()
         antProperties['robot.class'] = '${package}.Robot'
         antProperties['team-number'] = String.valueOf(teamNumber)
 
