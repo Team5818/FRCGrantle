@@ -12,7 +12,8 @@ class FRCGrantleTest extends Specification {
     private static final def FVS_VERSIONS = [
             "versionSet_2017_3_1",
             "versionSet_2018_1_1",
-            "versionSet_2018_2_1"
+            "versionSet_2018_2_1",
+            "versionSet_2018_2_2"
     ]
     @Rule
     final TemporaryFolder testProjectDir = new TemporaryFolder()
