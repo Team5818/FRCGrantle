@@ -60,7 +60,7 @@ class FRCGrantleTest extends Specification {
 
         where:
         versionString << FVS_VERSIONS
-        networkTableProperty << ['networktables', 'ntcore', 'ntcore']
+        networkTableProperty << ['networktables', 'ntcore', 'ntcore', 'ntcore']
     }
 
     private Properties loadPropertiesFile() {
