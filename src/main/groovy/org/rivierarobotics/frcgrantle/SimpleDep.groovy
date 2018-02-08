@@ -6,31 +6,21 @@ class SimpleDep {
         return create(map['group'], map['name'], map['version'])
     }
 
-    static Creator WPILIB_2017 = new Creator("edu.wpi.first.wpilibj", "athena")
-    static Creator WPILIB_2017_NATIVE = new Creator("edu.wpi.first.wpilibj", "athena-jni")
-    static Creator WPILIB_2017_RUNTIME = new Creator("edu.wpi.first.wpilib", "athena-runtime")
-    static Creator WPILIB_2018 = new Creator("edu.wpi.first.wpilibj", "wpilibj")
-    static Creator WPILIB_2018_RUNTIME = new Creator("edu.wpi.first.wpilibj", "wpilibj-jniShared")
-    static Creator WPI_UTIL = new Creator("edu.wpi.first.wpiutil", "wpiutil-java")
-    static Creator WPI_UTIL_SHARED = new Creator("edu.wpi.first.wpiutil", "wpiutil")
+    static Creator WPILIB = new Creator("edu.wpi.first.wpilibj", "wpilibj")
+    static Creator WPI_UTIL = new Creator("edu.wpi.first.wpiutil", "wpiutil")
     static Creator OPENCV = new Creator("org.opencv", "opencv")
-    static Creator CSCORE = new Creator("edu.wpi.cscore.java", "cscore")
-    static Creator CSCORE_NATIVE = CSCORE
-    static Creator CSCORE_2018 = new Creator("edu.wpi.first.cscore", "cscore")
-    static Creator NETWORK_TABLES = new Creator("edu.wpi.first.wpilib.networktables.java", "NetworkTables")
+    static Creator CSCORE= new Creator("edu.wpi.first.cscore", "cscore")
     static Creator NTCORE = new Creator("edu.wpi.first.ntcore", "ntcore")
-    static Creator CTR_LIB = new Creator("com.ctre", "ctrlib")
-    static Creator CTR_LIB_NATIVE = new Creator("com.ctre", "ctrlib")
+    static Creator CTR_LIB = new Creator("com.ctre.ctrlib", "ctrlib")
     static Creator NAVX = new Creator("com.kauailabs.navx.frc", "navx_frc")
-
     static Creator HAL_NATIVE = new Creator("edu.wpi.first.hal", "hal")
 
-    static SimpleDep create(String group, String name, String version) {
+    static SimpleDep create(String group, String name, String version, Map<String, String> inputOverrides = [:]) {
         // toolazy.png
         if (group == null || name == null || version == null) {
             throw new NullPointerException("one is null: ${group}/${name}/${version}")
         }
-        return new SimpleDep(group, name, version)
+        return new SimpleDep(group, name, version, inputOverrides)
     }
 
     static final class Creator {
@@ -49,7 +39,7 @@ class SimpleDep {
     final String group, name, version
     final Map<String, String> inputOverrides
 
-    private SimpleDep(String group, String name, String version, Map<String, String> inputOverrides = [:]) {
+    private SimpleDep(String group, String name, String version, Map<String, String> inputOverrides) {
         this.group = group
         this.name = name
         this.version = version
@@ -57,7 +47,7 @@ class SimpleDep {
     }
 
     SimpleDep withName(String name) {
-        return create(group, name, version)
+        return create(group, name, version, inputOverrides)
     }
 
     SimpleDep withNameSuffix(String suffix) {
@@ -65,7 +55,7 @@ class SimpleDep {
     }
 
     SimpleDep withGroupName(String group, String name) {
-        return create(group, name, version)
+        return create(group, name, version, inputOverrides)
     }
 
     SimpleDep addInputOverrides(Map<String, String> inputOverrides) {
@@ -75,7 +65,7 @@ class SimpleDep {
     }
 
     SimpleDep withInputOverrides(Map<String, String> inputOverrides) {
-        return new SimpleDep(group, name, version, inputOverrides)
+        return create(group, name, version, inputOverrides)
     }
 
     Map<String, String> toMapDependency(Map<String, String> inputs = [:]) {

@@ -10,9 +10,6 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class FRCGrantleTest extends Specification {
     private static final def FVS_VERSIONS = [
-            "versionSet_2017_3_1",
-            "versionSet_2018_1_1",
-            "versionSet_2018_2_1",
             "versionSet_2018_2_2"
     ]
     @Rule
@@ -42,7 +39,7 @@ class FRCGrantleTest extends Specification {
         newBuildFile(versionString)
         def result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
-                .withArguments('configureFrcAnt', '-S')
+                .withArguments('configureFrcAnt', '-Si')
                 .withPluginClasspath()
                 .build()
 
@@ -52,15 +49,15 @@ class FRCGrantleTest extends Specification {
             assert props.containsKey('userLibs.dir')
             assert props.containsKey('wpilib.native.lib')
             assert props.containsKey('cscore.jar')
-            assert props.containsKey(networkTableProperty + '.jar')
+            assert props.containsKey('ntcore.jar')
             assert props.containsKey('opencv.jar')
             assert props.containsKey('wpilib.jar')
+            assert props.containsKey('wpiutil.jar')
             assert props.getOrDefault('team-number', '') == '5818'
         }
 
         where:
         versionString << FVS_VERSIONS
-        networkTableProperty << ['networktables', 'ntcore', 'ntcore', 'ntcore']
     }
 
     private Properties loadPropertiesFile() {
@@ -76,7 +73,7 @@ class FRCGrantleTest extends Specification {
         newBuildFile(versionString)
         def result = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
-                .withArguments('copyFrcFiles', '-S')
+                .withArguments('copyFrcFiles', '-Si')
                 .withPluginClasspath()
                 .build()
 

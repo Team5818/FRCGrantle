@@ -64,10 +64,12 @@ class StandardScript implements Plugin<Project> {
 
         Configuration frcCompileConf = project.configurations.getByName(FRC_COMPILE)
         Configuration frcNativeConf = null
+        Configuration frcBuiltInNativeConf = null
 
         // setup lib catchers
         project.configurations { ConfigurationContainer conf ->
             frcNativeConf = conf.create(FRC_NATIVE)
+            frcBuiltInNativeConf = conf.create(FRC_BUILT_IN_NATIVE)
         }
 
         Set<Dependency> excludedDeps = new HashSet<>()
@@ -82,6 +84,14 @@ class StandardScript implements Plugin<Project> {
             task.expectedExtensions("so")
         }
 
+        def copyBuiltInNativeTask = project.tasks.create("copyFrcBuiltInNativeFiles", FirstCopy) { FirstCopy task ->
+            task.unpackJar(true)
+            task.configuration(frcBuiltInNativeConf)
+            task.outputDir(configTask.wpilibNativeDir)
+            task.excludedDependencies = excludedDeps
+            task.expectedExtensions("so")
+        }
+
         def copyCompileTask = project.tasks.create("copyFrcCompileFiles", FirstCopy) { FirstCopy task ->
             task.unpackJar(false)
             task.configuration(frcCompileConf)
@@ -90,11 +100,12 @@ class StandardScript implements Plugin<Project> {
             task.expectedExtensions("jar")
         }
 
-        def copyFrcTask = project.tasks.create("copyFrcFiles") { Task task -> task.dependsOn(copyCompileTask, copyNativeTask) }
+        def copyFrcTask = project.tasks.create("copyFrcFiles") { Task task -> task.dependsOn(copyCompileTask, copyNativeTask, copyBuiltInNativeTask) }
 
         // setup task dependencies
         copyCompileTask.dependsOn(configTask)
         copyNativeTask.dependsOn(configTask)
+        copyBuiltInNativeTask.dependsOn(configTask)
         project.tasks.getByName('eclipse').dependsOn(copyFrcTask)
 
         project.afterEvaluate {
@@ -113,6 +124,10 @@ class StandardScript implements Plugin<Project> {
 
                 vs.userNative.forEach { simpleDep ->
                     deps.add(FRC_NATIVE, simpleDep.toMapDependency())
+                }
+
+                vs.builtInNative.forEach { simpleDep ->
+                    deps.add(FRC_BUILT_IN_NATIVE, simpleDep.toMapDependency())
                 }
             }
         }

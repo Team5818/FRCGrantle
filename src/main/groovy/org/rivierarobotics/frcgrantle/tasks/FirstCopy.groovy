@@ -112,8 +112,9 @@ class FirstCopy extends DefaultTask {
                     files = project.zipTree(file)
             }
             files.filter { f ->
-                def extension = f.name.split("\\.").last()
-                return expectedExtensions.contains(extension)
+                def extensions = Arrays.asList(f.name.split("\\."))
+                extensions = extensions.subList(1, extensions.size())
+                return extensions.any { extension -> expectedExtensions.contains(extension) }
             }.each { f ->
                 f.withInputStream { input ->
                     def outputFile = new File(getOutputDir(), f.name)
