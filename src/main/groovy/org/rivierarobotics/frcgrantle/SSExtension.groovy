@@ -62,16 +62,20 @@ class SSExtension {
     }
 
     def versionSet_2018_2_2() {
-        versionSet.addNewStyleBuiltInLibrary('wpilib', SimpleDep.WPILIB_2018.withVersion('2018.2.2'))
-        versionSet.addUserNativeLibrary(SimpleDep.WPILIB_2018_RUNTIME.withVersion('2018.2.2').withInputOverrides(classifier: 'linuxathena'))
+        def WPI = '2018.2.2'
+        def OPENCV = '3.2.0'
+        versionSet.addBuiltInLibrary('wpilib', SimpleDep.WPILIB_2018.withVersion(WPI).withNameSuffix('-java'))
+        versionSet.addUserNativeLibrary(SimpleDep.WPILIB_2018_RUNTIME.withVersion(WPI).withInputOverrides(classifier: 'linuxathena'))
+        versionSet.addUserNativeLibrary(SimpleDep.HAL_NATIVE.withVersion(WPI))
 
-        versionSet.addBuiltInLibrary('wpiutil', SimpleDep.WPI_UTIL.withVersion('3.0.0'))
+        versionSet.addNewStyleBuiltInLibraryShared('wpiutil', SimpleDep.WPI_UTIL_SHARED.withVersion('3.0.0'))
 
-        versionSet.addNewStyleBuiltInLibrary('opencv', SimpleDep.OPENCV.withVersion('3.2.0'))
+        versionSet.addUserNativeLibrary(SimpleDep.OPENCV.withVersion(OPENCV).withInputOverrides(classifier: 'linuxathena').withNameSuffix('-jni'))
+        versionSet.addNewStyleBuiltInLibraryShared('opencv', SimpleDep.OPENCV.withVersion(OPENCV))
 
-        versionSet.addNewStyleBuiltInLibrary('cscore', SimpleDep.CSCORE_2018.withVersion('1.1.0'))
+        versionSet.addNewStyleBuiltInLibraryShared('cscore', SimpleDep.CSCORE_2018.withVersion('1.1.0'))
 
-        versionSet.addNewStyleBuiltInLibrary('ntcore', SimpleDep.NTCORE.withVersion('4.0.0'))
+        versionSet.addNewStyleBuiltInLibraryShared('ntcore', SimpleDep.NTCORE.withVersion('4.0.0'))
 
         versionSet.addUserJavaLibrary(SimpleDep.CTR_LIB.withVersion('5.2.1.1'))
         versionSet.addUserNativeLibrary(SimpleDep.CTR_LIB_NATIVE.withVersion('5.2.1.1').withInputOverrides(ext: 'zip'))

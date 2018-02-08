@@ -39,13 +39,29 @@ class FirstVersionSet {
         userNative.add(dependency)
     }
 
+    // helper for addNewStyle
+    def addFirstNativeLibrary(SimpleDep dependency, String suffix = 'cpp', String ext = 'zip') {
+        addUserNativeLibrary(dependency.withNameSuffix('-' + suffix).addInputOverrides(classifier: 'linuxathena', 'ext': ext))
+    }
+
     /**
      * Adds a new-style built-in library, with the java library under name + '-java', and natives under name + '-jni'.
      * Also adds the appropriate classifier to the native dependency
      */
     def addNewStyleBuiltInLibrary(String propertyKey, SimpleDep dependency) {
-        addBuiltInLibrary(propertyKey, dependency.withName(dependency.name + '-java'))
-        addUserNativeLibrary(dependency.withName(dependency.name + '-jni').addInputOverrides(classifier: 'linuxathena'))
+        addBuiltInLibrary(propertyKey, dependency.withNameSuffix('-java'))
+        addFirstNativeLibrary(dependency, 'jni', 'jar')
+    }
+
+    /**
+     * Adds a new-style built-in library, with the java library under name + '-java', and natives under name + '-cpp'.
+     * Also adds the appropriate classifier to the native dependency.
+     *
+     * Uses shared libraries instead.
+     */
+    def addNewStyleBuiltInLibraryShared(String propertyKey, SimpleDep dependency) {
+        addBuiltInLibrary(propertyKey, dependency.withNameSuffix('-java'))
+        addFirstNativeLibrary(dependency)
     }
 
 }

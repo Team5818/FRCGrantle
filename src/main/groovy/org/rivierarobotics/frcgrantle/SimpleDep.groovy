@@ -12,6 +12,7 @@ class SimpleDep {
     static Creator WPILIB_2018 = new Creator("edu.wpi.first.wpilibj", "wpilibj")
     static Creator WPILIB_2018_RUNTIME = new Creator("edu.wpi.first.wpilibj", "wpilibj-jniShared")
     static Creator WPI_UTIL = new Creator("edu.wpi.first.wpiutil", "wpiutil-java")
+    static Creator WPI_UTIL_SHARED = new Creator("edu.wpi.first.wpiutil", "wpiutil")
     static Creator OPENCV = new Creator("org.opencv", "opencv")
     static Creator CSCORE = new Creator("edu.wpi.cscore.java", "cscore")
     static Creator CSCORE_NATIVE = CSCORE
@@ -21,6 +22,8 @@ class SimpleDep {
     static Creator CTR_LIB = new Creator("com.ctre", "ctrlib")
     static Creator CTR_LIB_NATIVE = new Creator("com.ctre", "ctrlib")
     static Creator NAVX = new Creator("com.kauailabs.navx.frc", "navx_frc")
+
+    static Creator HAL_NATIVE = new Creator("edu.wpi.first.hal", "hal")
 
     static SimpleDep create(String group, String name, String version) {
         // toolazy.png
@@ -55,6 +58,10 @@ class SimpleDep {
 
     SimpleDep withName(String name) {
         return create(group, name, version)
+    }
+
+    SimpleDep withNameSuffix(String suffix) {
+        return withName(name + suffix)
     }
 
     SimpleDep withGroupName(String group, String name) {
