@@ -12,7 +12,6 @@ class SimpleDep {
     static Creator CSCORE= new Creator("edu.wpi.first.cscore", "cscore")
     static Creator NTCORE = new Creator("edu.wpi.first.ntcore", "ntcore")
     static Creator CTR_LIB = new Creator("com.ctre.ctrlib", "ctrlib")
-    static Creator NAVX = new Creator("com.kauailabs.navx.frc", "navx_frc")
     static Creator HAL_NATIVE = new Creator("edu.wpi.first.hal", "hal")
 
     static SimpleDep create(String group, String name, String version, Map<String, String> inputOverrides = [:]) {

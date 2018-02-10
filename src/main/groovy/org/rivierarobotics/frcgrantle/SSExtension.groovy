@@ -36,9 +36,6 @@ class SSExtension {
         versionSet.addUserLibrary(SimpleDep.CTR_LIB.withVersion(ctr),
                 [LibraryKind.builtInJava(), LibraryKind.cpp()])
 
-        versionSet.addUserLibrary(SimpleDep.NAVX.withVersion(navX),
-                [LibraryKind.userJava()])
-
         appliedVersionConfiguration = true
     }
 

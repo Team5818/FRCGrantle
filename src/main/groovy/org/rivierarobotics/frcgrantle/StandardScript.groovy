@@ -53,10 +53,6 @@ class StandardScript implements Plugin<Project> {
                 mar.url = "https://team5818.github.io/maven/"
             }
             repo.maven { MavenArtifactRepository mar ->
-                mar.name = "Kauai Labs Releases"
-                mar.url = "https://www.kauailabs.com/maven2"
-            }
-            repo.maven { MavenArtifactRepository mar ->
                 mar.name = "central snapshots"
                 mar.url = "https://oss.sonatype.org/content/repositories/snapshots/"
             }
@@ -140,6 +136,10 @@ class StandardScript implements Plugin<Project> {
         // Move source into src
         project.sourceSets.getByName('main') {
             it.java.srcDirs = it.resources.srcDirs = ['src']
+        }
+        // Move tests into src-tests
+        project.sourceSets.getByName('test') {
+            it.java.srcDirs = it.resources.srcDirs = ['src-tests']
         }
 
         // Setup compiling to be better.
