@@ -11,12 +11,22 @@ class SSExtension {
                 '3.2.0', // openCv
                 '1.1.0', // csCore
                 '4.0.0', // ntCore
-                '5.2.1.1', // ctr
-                '3.0.346' // navX
+                '5.2.1.1' // ctr
         )
     }
 
-    def versionSet_2018(String wpi, String wpiUtil, String openCv, String csCore, String ntCore, String ctr, String navX) {
+    def versionSet_2018_3_1() {
+        versionSet_2018(
+                '2018.3.1', // wpi
+                '3.1.0', // wpiUtil
+                '3.2.0', // openCv
+                '1.2.0', // csCore
+                '4.0.0', // ntCore
+                '5.2.1.1' // ctr
+        )
+    }
+
+    def versionSet_2018(String wpi, String wpiUtil, String openCv, String csCore, String ntCore, String ctr) {
         versionSet.addFirstLibrary('wpilib', SimpleDep.WPILIB.withVersion(wpi),
                 [LibraryKind.builtInJava(), LibraryKind.nativeKind('jniShared', 'jar')])
         versionSet.addBuiltInNativeLibrary(SimpleDep.HAL_NATIVE.withVersion(wpi))

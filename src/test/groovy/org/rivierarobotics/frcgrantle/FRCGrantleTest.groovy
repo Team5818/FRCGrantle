@@ -10,7 +10,8 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class FRCGrantleTest extends Specification {
     private static final def FVS_VERSIONS = [
-            "versionSet_2018_2_2"
+            "versionSet_2018_2_2",
+            "versionSet_2018_3_1"
     ]
     @Rule
     final TemporaryFolder testProjectDir = new TemporaryFolder()
