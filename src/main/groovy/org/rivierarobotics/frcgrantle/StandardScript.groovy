@@ -47,14 +47,23 @@ class StandardScript implements Plugin<Project> {
             repo.maven { MavenArtifactRepository mar ->
                 mar.name = "FRC Releases"
                 mar.url = "http://first.wpi.edu/FRC/roborio/maven/release"
+                mar.metadataSources({ ms ->
+                    ms.mavenPom()
+                })
             }
             repo.maven { MavenArtifactRepository mar ->
                 mar.name = "5818 Releases"
                 mar.url = "https://team5818.github.io/maven/"
+                mar.metadataSources({ ms ->
+                    ms.artifact()
+                })
             }
             repo.maven { MavenArtifactRepository mar ->
                 mar.name = "central snapshots"
                 mar.url = "https://oss.sonatype.org/content/repositories/snapshots/"
+                mar.metadataSources({ ms ->
+                    ms.mavenPom()
+                })
             }
         }
 

@@ -26,6 +26,17 @@ class SSExtension {
         )
     }
 
+    def versionSet_2018_3_3() {
+        versionSet_2018(
+                '2018.3.3', // wpi
+                '3.1.0', // wpiUtil
+                '3.2.0', // openCv
+                '1.2.0', // csCore
+                '4.0.0', // ntCore
+                '5.3.1.0' // ctr
+        )
+    }
+
     def versionSet_2018(String wpi, String wpiUtil, String openCv, String csCore, String ntCore, String ctr) {
         versionSet.addFirstLibrary('wpilib', SimpleDep.WPILIB.withVersion(wpi),
                 [LibraryKind.builtInJava(), LibraryKind.nativeKind('jniShared', 'jar')])
