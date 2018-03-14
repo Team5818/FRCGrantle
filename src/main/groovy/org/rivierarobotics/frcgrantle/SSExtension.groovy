@@ -37,6 +37,17 @@ class SSExtension {
         )
     }
 
+    def versionSet_2018_4_1() {
+        versionSet_2018(
+                '2018.4.1', // wpi
+                '3.2.0', // wpiUtil
+                '3.2.0', // openCv
+                '1.3.0', // csCore
+                '4.1.0', // ntCore
+                '5.3.1.0' // ctr
+        )
+    }
+
     def versionSet_2018(String wpi, String wpiUtil, String openCv, String csCore, String ntCore, String ctr) {
         versionSet.addFirstLibrary('wpilib', SimpleDep.WPILIB.withVersion(wpi),
                 [LibraryKind.builtInJava(), LibraryKind.nativeKind('jniShared', 'jar')])
@@ -58,6 +69,12 @@ class SSExtension {
                 [LibraryKind.builtInJava(), LibraryKind.cpp()])
 
         appliedVersionConfiguration = true
+    }
+
+    def usePathfinder(String version) {
+        versionSet.addUserLibrary(SimpleDep.PATHFINDER.withVersion(version),
+                [LibraryKind.of('Java', '', 'jar'),
+                 LibraryKind.of('JNI', 'athena', 'zip')])
     }
 
     String javaVersion = '1.8'

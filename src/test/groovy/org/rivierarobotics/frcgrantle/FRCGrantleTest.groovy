@@ -10,14 +10,16 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class FRCGrantleTest extends Specification {
     private static final def FVS_VERSIONS = [
-            "versionSet_2018_2_2",
-            "versionSet_2018_3_1"
+            "2018.2.2",
+            "2018.3.1",
+            "2018.3.3",
+            "2018.4.1"
     ]
     @Rule
     final TemporaryFolder testProjectDir = new TemporaryFolder()
     File buildFile
 
-    def newBuildFile(String versionString) {
+    def newBuildFile(String versionString, String pathfinder = null) {
         buildFile = testProjectDir.newFile('build.gradle')
         buildFile << """
             plugins {
@@ -25,8 +27,13 @@ class FRCGrantleTest extends Specification {
             }
             grantle.packageBase = "org.rivierarobotics.robot"
             grantle.teamNumber = 5818
-            grantle.${versionString}()
+            grantle.versionSet_${versionString.replace('.', '_')}()
         """
+        if (pathfinder != null) {
+            buildFile << """
+            grantle.usePathfinder("${pathfinder}")
+        """
+        }
         def props = testProjectDir.newFile('gradle.properties')
         props << """
             organization=test
@@ -88,5 +95,24 @@ class FRCGrantleTest extends Specification {
 
         where:
         versionString << FVS_VERSIONS
+    }
+
+    def "Grantle includes pathfinder if asked"() {
+        when:
+        newBuildFile("2018.4.1", "1.8")
+        def result = GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments('copyFrcFiles', '-Si')
+                .withPluginClasspath()
+                .build()
+
+        then:
+        assert result.task(":copyFrcFiles").outcome == SUCCESS
+        with(loadPropertiesFile()) { Properties props ->
+            def userLibs = new File((String) props['userLibs.dir'])
+            assert userLibs.exists()
+            assert userLibs.list().length > 0
+            assert userLibs.list().any { f -> f.contains("libpathfinderjava.so") }
+        }
     }
 }

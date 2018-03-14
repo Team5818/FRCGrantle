@@ -13,6 +13,7 @@ class SimpleDep {
     static Creator NTCORE = new Creator("edu.wpi.first.ntcore", "ntcore")
     static Creator CTR_LIB = new Creator("com.ctre.ctrlib", "ctrlib")
     static Creator HAL_NATIVE = new Creator("edu.wpi.first.hal", "hal")
+    static Creator PATHFINDER = new Creator('jaci.pathfinder', 'Pathfinder')
 
     static SimpleDep create(String group, String name, String version, Map<String, String> inputOverrides = [:]) {
         // toolazy.png

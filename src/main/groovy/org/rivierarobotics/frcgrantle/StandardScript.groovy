@@ -51,6 +51,14 @@ class StandardScript implements Plugin<Project> {
                     ms.mavenPom()
                 })
             }
+            // For pathfinder
+            repo.maven { MavenArtifactRepository mar ->
+                mar.name = "Jaci Releases"
+                mar.url = "http://dev.imjac.in/maven"
+                mar.metadataSources({ ms ->
+                    ms.mavenPom()
+                })
+            }
             repo.maven { MavenArtifactRepository mar ->
                 mar.name = "5818 Releases"
                 mar.url = "https://team5818.github.io/maven/"
