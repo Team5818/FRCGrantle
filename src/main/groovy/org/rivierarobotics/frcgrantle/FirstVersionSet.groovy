@@ -58,7 +58,7 @@ class FirstVersionSet {
             if (!kind.suffix.isEmpty()) {
                 dep = dep.withNameSuffix('-' + kind.suffix)
             }
-            callback.call(dep, kind == LibraryKind.userJava() || kind == LibraryKind.builtInJava())
+            callback.call(dep, kind.java)
         }
     }
 

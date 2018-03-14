@@ -113,6 +113,7 @@ class FRCGrantleTest extends Specification {
             assert userLibs.exists()
             assert userLibs.list().length > 0
             assert userLibs.list().any { f -> f.contains("libpathfinderjava.so") }
+            assert userLibs.list().any { f -> f.contains("Pathfinder") && f.endsWith(".jar") }
         }
     }
 }

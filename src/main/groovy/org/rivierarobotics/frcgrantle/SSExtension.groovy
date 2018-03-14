@@ -73,7 +73,7 @@ class SSExtension {
 
     def usePathfinder(String version) {
         versionSet.addUserLibrary(SimpleDep.PATHFINDER.withVersion(version),
-                [LibraryKind.of('Java', '', 'jar'),
+                [LibraryKind.javaKind('Java'),
                  LibraryKind.of('JNI', 'athena', 'zip')])
     }
 

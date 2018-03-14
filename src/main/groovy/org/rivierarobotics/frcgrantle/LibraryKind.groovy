@@ -2,8 +2,8 @@ package org.rivierarobotics.frcgrantle
 
 class LibraryKind {
 
-    private static final LibraryKind BUILT_IN_JAVA = of('java', '', 'jar')
-    private static final LibraryKind USER_JAVA = of('', '', 'jar')
+    private static final LibraryKind BUILT_IN_JAVA = javaKind('java')
+    private static final LibraryKind USER_JAVA = javaKind('')
     private static final LibraryKind JNI = nativeKind('jni', 'jar')
     private static final LibraryKind CPP = nativeKind('cpp', 'zip')
 
@@ -27,18 +27,24 @@ class LibraryKind {
         return of(suffix, 'linuxathena', ext)
     }
 
-    static LibraryKind of(String suffix, String classifier, String ext) {
-        return new LibraryKind(suffix, classifier, ext)
+    static LibraryKind javaKind(String suffix) {
+        return of(suffix, '', 'jar', true)
+    }
+
+    static LibraryKind of(String suffix, String classifier, String ext, boolean java = false) {
+        return new LibraryKind(suffix, classifier, ext, java)
     }
 
     private final String suffix
     private final String classifier
     private final String ext
+    private final boolean java
 
-    private LibraryKind(String suffix, String classifier, String ext) {
+    private LibraryKind(String suffix, String classifier, String ext, boolean java) {
         this.suffix = suffix
         this.classifier = classifier
         this.ext = ext
+        this.java = java
     }
 
     String getSuffix() {
@@ -51,6 +57,10 @@ class LibraryKind {
 
     String getExt() {
         return ext
+    }
+
+    boolean isJava() {
+        return java
     }
 
     boolean equals(o) {
