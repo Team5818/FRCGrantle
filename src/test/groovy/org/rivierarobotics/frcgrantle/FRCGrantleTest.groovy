@@ -108,7 +108,6 @@ class FRCGrantleTest extends Specification {
                 .withProjectDir(testProjectDir.root)
                 .withArguments('copyFrcFiles', '-Si')
                 .withPluginClasspath()
-                .forwardOutput()
                 .build()
 
         then:

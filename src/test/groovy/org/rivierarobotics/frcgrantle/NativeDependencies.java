@@ -22,6 +22,11 @@ public class NativeDependencies {
 
     private static Process getNativeDeps;
 
+    public static void terminate() {
+        getNativeDeps.destroy();
+        getNativeDeps = null;
+    }
+
     private static void startGetNativeDeps() {
         if (getNativeDeps != null) {
             if (getNativeDeps.isAlive()) {

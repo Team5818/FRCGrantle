@@ -55,10 +55,13 @@ class DependencyCalculator(BaseRequestHandler):
         sck.sendall(b'\0')
 
 
+class ReusingTCP(ForkingTCPServer):
+    allow_reuse_address = True
+
+
 def start_serving(port):
-    with ForkingTCPServer(('localhost', port), DependencyCalculator) as server:
+    with ReusingTCP(('localhost', port), DependencyCalculator) as server:
         print('Listening on', port, flush=True)
-        server.allow_reuse_address = True
         server.serve_forever()
 
 

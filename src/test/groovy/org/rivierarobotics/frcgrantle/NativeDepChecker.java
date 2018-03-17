@@ -14,15 +14,19 @@ public class NativeDepChecker {
     private static final Pattern LIB_FILE = Pattern.compile("\\.(so|a)");
 
     public static Set<String> getUnsatisfiedDependencies(List<Path> roots) throws IOException {
-        ImmutableSet.Builder<String> unsat = ImmutableSet.builder();
-        for (Path root : roots) {
-            Files.list(root)
-                    .filter(p -> LIB_FILE.matcher(p.getFileName().toString()).find())
-                    .filter(p -> !p.getFileName().toString().endsWith(".debug"))
-                    .map(p -> new NativeDepChecker(roots, p).getUnsatisfiedDependencies())
-                    .forEach(unsat::addAll);
+        try {
+            ImmutableSet.Builder<String> unsat = ImmutableSet.builder();
+            for (Path root : roots) {
+                Files.list(root)
+                        .filter(p -> LIB_FILE.matcher(p.getFileName().toString()).find())
+                        .filter(p -> !p.getFileName().toString().endsWith(".debug"))
+                        .map(p -> new NativeDepChecker(roots, p).getUnsatisfiedDependencies())
+                        .forEach(unsat::addAll);
+            }
+            return unsat.build();
+        } finally {
+            NativeDependencies.terminate();
         }
-        return unsat.build();
     }
 
     private final List<Path> roots;
