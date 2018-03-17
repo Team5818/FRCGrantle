@@ -51,7 +51,8 @@ class SSExtension {
     def versionSet_2018(String wpi, String wpiUtil, String openCv, String csCore, String ntCore, String ctr) {
         versionSet.addFirstLibrary('wpilib', SimpleDep.WPILIB.withVersion(wpi),
                 [LibraryKind.builtInJava(), LibraryKind.nativeKind('jniShared', 'jar')])
-        versionSet.addBuiltInNativeLibrary(SimpleDep.HAL_NATIVE.withVersion(wpi))
+        versionSet.addUserLibrary(SimpleDep.HAL_NATIVE.withVersion(wpi),
+                [LibraryKind.nativeKind('', 'zip')])
 
         versionSet.addFirstLibrary('wpiutil', SimpleDep.WPI_UTIL.withVersion(wpiUtil),
                 [LibraryKind.builtInJava(), LibraryKind.cpp()])

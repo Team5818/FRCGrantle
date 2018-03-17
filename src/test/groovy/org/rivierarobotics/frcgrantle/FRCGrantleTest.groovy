@@ -97,6 +97,38 @@ class FRCGrantleTest extends Specification {
         versionString << FVS_VERSIONS
     }
 
+    /*
+     * This test verifies that all library files have their respective libraries also resolved.
+     */
+    @Unroll("Grantle installs native dependencies completely for #versionString")
+    def "installs native libraries correctly"() {
+        when:
+        newBuildFile(versionString)
+        def result = GradleRunner.create()
+                .withProjectDir(testProjectDir.root)
+                .withArguments('copyFrcFiles', '-Si')
+                .withPluginClasspath()
+                .forwardOutput()
+                .build()
+
+        then:
+        assert result.task(":copyFrcFiles").outcome == SUCCESS
+        with(loadPropertiesFile()) { Properties props ->
+            def userLibs = new File((String) props['userLibs.dir'])
+            def wpiLibs = new File((String) props['wpilib.native.lib'])
+            assert userLibs.exists()
+            assert userLibs.list().length > 0
+            def unsat = NativeDepChecker.getUnsatisfiedDependencies([userLibs.toPath(), wpiLibs.toPath()])
+            if (!unsat.isEmpty()) {
+                userLibs.list().each { println it }
+                assert unsat.isEmpty()
+            }
+        }
+
+        where:
+        versionString << FVS_VERSIONS
+    }
+
     def "Grantle includes pathfinder if asked"() {
         when:
         newBuildFile("2018.4.1", "1.8")
