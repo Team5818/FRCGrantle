@@ -1,5 +1,6 @@
 package org.rivierarobotics.frcgrantle
 
+import com.techshroom.inciseblue.InciseBlueExtension
 import nl.javadude.gradle.plugins.license.License
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -14,10 +15,8 @@ import org.gradle.api.plugins.ExtraPropertiesExtension
 import org.gradle.api.tasks.compile.JavaCompile
 import org.rivierarobotics.frcgrantle.tasks.FirstAntConfig
 import org.rivierarobotics.frcgrantle.tasks.FirstCopy
-import util.PluginExtension
 
 import static org.rivierarobotics.frcgrantle.Const.*
-import static org.rivierarobotics.frcgrantle.Util.ifNonNull
 
 class StandardScript implements Plugin<Project> {
 
@@ -30,15 +29,18 @@ class StandardScript implements Plugin<Project> {
         project.apply plugin: 'java'
         project.apply plugin: 'eclipse'
         project.apply plugin: 'idea'
-        project.apply plugin: 'aversion-util'
+        project.apply plugin: 'com.techshroom.incise-blue'
 
         // to avoid conflicts with ant, which also uses build
         project.buildDir = project.file('gradleBuildDir')
 
         project.afterEvaluate {
-            PluginExtension util = (PluginExtension) project.extensions.getByName('util')
+            InciseBlueExtension inciseBlue = (InciseBlueExtension) project.extensions.getByName('inciseBlue')
+            inciseBlue.plugins({ p ->
+                p.util()
+            })
             ext.validate()
-            util.javaVersion = ext.javaVersion
+            inciseBlue.util.javaVersion = ext.javaVersion
             project.idea.project.languageLevel = ext.javaVersion
         }
 

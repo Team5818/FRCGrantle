@@ -26,9 +26,9 @@ dependencies {
     compile localGroovy()
     compile 'net.ltgt.gradle:gradle-apt-plugin:0.13'
     compile 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
-    compile 'com.techshroom:Aversion:3.0.1'
+    compile 'com.techshroom.incise-blue:com.techshroom.incise-blue.gradle.plugin:0.0.8'
     testCompile 'junit:junit:4.12'
-    testCompile 'com.google.guava:guava:24.0-jre'
+    testCompile 'com.google.guava:guava:24.1-jre'
     testCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
         exclude(group: 'org.codehaus.groovy')
     }
